@@ -1,0 +1,21 @@
+INDEX VERSION 1.127+D:\javawork_myHearthStone\.metadata\.plugins\org.eclipse.jdt.core
+981540469.index
+4014233450.index
+2890790498.index
+3971528768.index
+3932418031.index
+1833536843.index
+1081712033.index
+523370088.index
+3223680069.index
+624903813.index
+4141506820.index
+4201604834.index
+3276870380.index
+3105335220.index
+1941667867.index
+4288977222.index
+1580093783.index
+885131666.index
+3131490773.index
+3892421418.index

@@ -1,0 +1,161 @@
+package init;
+
+
+/*
+*初始化类*
+*读取武将名称
+*读取牌面内容
+*/
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import Card.*;
+import Role.Character;
+import Role.PlayerAI;
+import Role.RexxarRemar;
+
+public class Initial {
+	public static String[] name = new String[1];                  //英雄名字的string数组
+	public static String[] cardKey = new String[30];             //牌面内容的string数组
+	public static String[] cardKeyai = new String[30];             //牌面内容的string数组
+	public static Card[] card1 = new Card[30];                      //30张牌
+	public static Card[] cardai = new Card[30];                      //30张牌
+	public static List<Card> listCard = new ArrayList<Card>();      //牌堆集合
+	public static List<Card> listCardAi = new ArrayList<Card>();      //牌堆集合
+	public static List<Card> throwlistCard = new ArrayList<Card>(); //废弃牌堆
+	public static Card tmpCheckCard;                                //存放判定牌的临时变量
+	public static Character cAI ;                     //AI新建武将---测试 XXX
+	public static PlayerAI p2 ;   //AI玩家构造
+	public static boolean who ;                                      //决定轮流次序，T为玩家，F为AI；初始为T
+	public static HashMap<String, String> hmp = new HashMap<String, String>();    //牌的键值对<Card.name,index>
+	public static HashMap<String,Character> hm = new HashMap<String,Character>(); //人物的键值对
+	public static List<Card> listPerson=new ArrayList<Card>();	//仆从集合
+	 // 静态方法，初始化牌组
+	public static void cardInit() throws Exception {                                    
+		Initial.setCardKey();
+		Initial.setCardKeyAI();
+		for (int i = 0; i < 30; i++) {
+			Initial.card1[i] = new Card();
+			Initial.card1[i].setId("user"+i);
+			Initial.card1[i].setName(Initial.cardKey[i]);
+			Initial.card1[i].setKey(Initial.cardKey[i]);
+			Card o = Initial.card1[i];
+			//System.out.println("Card."+Initial.cardKey[i]);
+			Class classes =Class.forName("Card."+Initial.cardKey[i]);
+			Object own = classes.newInstance();
+			Card perCard =(Card) own;
+			perCard.setId("user"+i);
+			perCard.setKey(perCard.getName());
+			perCard.setName(perCard.getName());
+			Initial.listCard.add(perCard);
+		}
+		for (int i = 0; i < 30; i++) {
+			Initial.cardai[i] = new Card();
+			Initial.cardai[i].setId("ai"+i);
+			Initial.cardai[i].setKey(Initial.cardKeyai[i]);
+			Initial.cardai[i].setName(Initial.cardKeyai[i]);
+			Card o = Initial.cardai[i];
+			System.out.println(cardKeyai[i]);
+			Class classes =Class.forName("Card."+Initial.cardKeyai[i]);
+			Object own = classes.newInstance();
+			Card perCard =(Card) own;
+			perCard.setId("ai"+i);
+			perCard.setKey(perCard.getName());
+			perCard.setName(perCard.getName());
+			Initial.listCardAi.add(perCard);
+		}
+			for (int i = 0; i < Initial.card1.length; i++) {// 打乱顺序
+				Random r = new Random();
+				Card cardtmp = Initial.listCard.get(i);
+				cardtmp.setId(i+"test");
+				cardtmp.setName(cardtmp.getKey());
+				Initial.listCard.remove(i);
+				Initial.listCard.add(r.nextInt(Initial.listCard.size()), cardtmp);
+				
+			}
+			for (int i = 0; i < Initial.cardai.length; i++) {// 打乱顺序
+				Random r = new Random();
+				Card cardtmp = Initial.listCardAi.get(i);
+				cardtmp.setId(i+"ai");
+				cardtmp.setName(cardtmp.getKey());
+				Initial.listCardAi.remove(i);
+				Initial.listCardAi.add(r.nextInt(Initial.listCardAi.size()), cardtmp);
+				
+			}
+			//打印出来,测试用
+//			for (int i = 0; i < Initial.listCard.size(); i++) {
+//				
+//				System.out.println(Initial.listCard.get(i));
+//			}
+			
+	}
+	public static void list(){ //********************************     //打印武将列表以供选择
+		Initial.line();
+		System.out.println("=======欢迎来到简易版控制台炉石传说=======");
+		Initial.line();
+		name[0]= "雷克萨";
+		System.out.println("请输入序号选择英雄...");
+		for(int i=0;i<name.length ;i++){
+			System.out.println(i+"--"+name[i]);
+		}
+		System.out.print("=>");
+	} 
+	public static void setCardKey() throws Exception{  
+		//从cardkey.cdk文件中读取牌面内容
+		//项目所在文件夹路径
+		String path = System.getProperty("user.dir")+"\\src";
+		
+		FileInputStream fis = new FileInputStream(path+"\\cdk.cdk");
+		byte[] buff = new byte[1024];
+		int r = 0;
+		String str = new String();
+		while((r=fis.read(buff))>0){                                  //将读取的内容存放在str临时字符串里
+			str=new String(buff,0,r);
+		}
+		cardKey = str.split("，");                                    //用split方法，分割str赋值给静态数组cardkey
+	}
+//	public static void setCardPerson(){
+//		listPerson.add(new TaiYuanXiNiu());
+//		listPerson.add(new ChongFengZhu());
+//		listPerson.add(new DongWuHuoBan());
+//		listPerson.add(new HeiTieAiRen());
+//		listPerson.add(new HuoCheWang());
+//		listPerson.add(new JingLinglong());
+//		listPerson.add(new LeiOuKe());
+//		listPerson.add(new LuMangHuoJianBing());
+//		listPerson.add(new MaFengZhuRu());
+//		listPerson.add(new MiSha());
+//		listPerson.add(new PoSuiCanYangJiSi());
+//		listPerson.add(new QingXingLieBao());
+//		listPerson.add(new XunMengLong());
+//		listPerson.add(new XunShouShi());
+//		listPerson.add(new ZhongShi());
+//		
+//	}
+	public static void setCardKeyAI() throws Exception{  
+		//项目所在文件夹路径
+		String path = System.getProperty("user.dir")+"\\src";//从aicardkeyai.cdk文件中读取牌面内容
+		FileInputStream fis = new FileInputStream(path+"\\AIcdk.cdk");
+		byte[] buff = new byte[1024];
+		int r = 0;
+		String str = new String();
+		while((r=fis.read(buff))>0){                                  //将读取的内容存放在str临时字符串里
+			str=new String(buff,0,r);
+		}
+		cardKeyai = str.split("，");                                    //用split方法，分割str赋值给静态数组cardkey
+	}
+	public static void setKeyMap(){}
+	
+	//**********Map 武将和对象的键值表，供玩家用来选择*******************
+	public static void putCharacter(){
+		hm.put("雷克萨", new RexxarRemar());
+	}
+	//打印分割线
+	public static void line(){
+		System.out.println("========================================");
+	}
+}
+	
